@@ -1,12 +1,30 @@
 import { useState, useEffect } from "react";
+import { Error } from "./Error";
+import { Paciente } from "./Paciente";
 
-export const Formulario = ({pacientes, setPacientes}) => {
-  const [nombreMascota, setNombreMascota] = useState();
-  const [nombrePropietario, setNombrePropietario] = useState();
-  const [email, setEmail] = useState();
-  const [fecha, setFecha] = useState();
-  const [sintomas, setSintomas] = useState();
-  const [alert, setAlert] = useState();
+export const Formulario = ({pacientes, setPacientes, paciente}) => {
+  const [nombreMascota, setNombreMascota] = useState('');
+  const [nombrePropietario, setNombrePropietario] = useState('');
+  const [email, setEmail] = useState('');
+  const [fecha, setFecha] = useState('');
+  const [sintomas, setSintomas] = useState('');
+  const [alert, setAlert] = useState(false);
+
+  useEffect(() => {
+    if(Object.keys(paciente).length > 0 ){
+      setNombreMascota(paciente.nombreMascota)
+      setNombrePropietario(paciente.nombrePropietario)
+      setEmail(paciente.email)
+      setFecha(paciente.fecha)
+      setSintomas(paciente.sintomas)
+    }
+  }, [paciente]);
+
+  const generarId = () => {
+    const randomNum = Math.random().toString(36).substring(2);
+    const fecha = Date.now().toString(36);
+    return fecha + randomNum;
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,8 +32,9 @@ export const Formulario = ({pacientes, setPacientes}) => {
         setAlert(true)
         return;
       }
-
     setAlert(false);
+
+    
 
     const objetoPaciente = {
       nombreMascota, 
@@ -24,14 +43,24 @@ export const Formulario = ({pacientes, setPacientes}) => {
       fecha, 
       sintomas
     }
+
+    if(paciente.id){
+      objetoPaciente.id = paciente.id
+      const pacientesActualizados = paciente.map(pacienteState => pacienteState.id === paciente.id ? objetoPaciente : pacienteState)
+      setPacientes(pacientesActualizados)
+    }else{
+      objetoPaciente.id = generarId(), 
+      setPacientes([...pacientes, objetoPaciente]);
+    }
     
-    setPacientes([...pacientes, objetoPaciente]);
     
-    setNombreMascota('');
-    setNombrePropietario('');
-    setEmail('');
-    setFecha('');
-    setSintomas('');
+    
+    setNombreMascota('')
+    setNombrePropietario('')
+    setFecha('')
+    setSintomas('')
+    setEmail('')
+
   }
 
   return (
@@ -42,12 +71,7 @@ export const Formulario = ({pacientes, setPacientes}) => {
       </p>
 
       <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg py-10 px-5">
-        {alert && (
-        <div className="bg-red-800 text-white text-center p-3 uppercase font-bold mb-3 rounded">
-          <p>Todos los campos son obligatorios</p>
-        </div>
-        )
-        }
+        {alert && <Error><p>Todos los campos son obligatorios</p></Error>}
         <div className="mb-5">
           <label htmlFor='mascota' className="block text-gray-700 uppercase font-bold">Nombre mascota</label>
           <input
@@ -109,7 +133,7 @@ export const Formulario = ({pacientes, setPacientes}) => {
         <input
           type='submit'
           className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-all"
-          value='Agregar paciente'
+          value={paciente.id ? 'Editar Paciente' : 'Agregar Paciente'}
         />
       </form>
     </div>

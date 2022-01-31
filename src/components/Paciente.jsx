@@ -1,28 +1,41 @@
+import { useEffect } from "react";
 
-
-export const Paciente = () => {
+export const Paciente = ({paciente, setPaciente}) => {
+  const {nombreMascota, nombrePropietario, fecha, email, sintomas} = paciente
+  
   return (
     <div className='mx-5 my-10 bg-white shadow-md px-5 py-10 rounded-xl'>
     <p className='font-bold mb-3 text-gray-700 uppercase'>
-      Nombre: {' '}
-      <span className='font-normal normal-case'>Hook</span>
+      Nombre Mascota: {' '}
+      <span className='font-normal normal-case'>{nombreMascota}</span>
     </p>
     <p className='font-bold mb-3 text-gray-700 uppercase'>
-      Nombre: {' '}
-      <span className='font-normal normal-case'>Nicolas Varela</span>
+      Nombre paciente: {' '}
+      <span className='font-normal normal-case'>{nombrePropietario}</span>
     </p>
     <p className='font-bold mb-3 text-gray-700 uppercase'>
-      Nombre: {' '}
-      <span className='font-normal normal-case'>email@gmail.com</span>
+      Email: {' '}
+      <span className='font-normal normal-case'>{email}</span>
     </p>
     <p className='font-bold mb-3 text-gray-700 uppercase'>
-      Nombre: {' '}
-      <span className='font-normal normal-case'>10/12/2022</span>
+      Fecha: {' '}
+      <span className='font-normal normal-case'>{fecha}</span>
     </p>
     <p className='font-bold mb-3 text-gray-700 uppercase'>
-      Nombre: {' '}
-      <span className='font-normal normal-case'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero iure dignissimos voluptates amet, iste, modi explicabo odit reprehenderit nemo provident temporibus aut fugiat exercitationem saepe quidem maxime quam quod nam!</span>
+      Sintomas: {' '}
+      <span className='font-normal normal-case'>{sintomas}</span>
     </p>
+    <div className="flex justify-between mt-10">
+        <button 
+        type='button'
+        className="py-2 px-10 bg-indigo-600 hover:bg-indigo-700 rounded text-white font-bold uppercase"
+        onClick={() => setPaciente(paciente)}
+        >Editar</button>
+        <button 
+        type='button'
+        className="py-2 px-10 bg-red-600 hover:bg-red-700 rounded text-white font-bold uppercase"
+        >Eliminar</button>
+    </div>
 </div>
   );
 };
